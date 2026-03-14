@@ -60,7 +60,7 @@ Private Sub LoadParticipantList(Optional ByVal keyword As String = "")
     Dim i As Long, lastRow As Long
     Dim clientNameStr As String, shortNameStr As String, clientNumberStr As String
 
-    Set ws = Worksheets("項目")
+    Set ws = Worksheets("参加者一覧")
 
     Me.ListBox1.Clear
 
@@ -115,7 +115,7 @@ Private Sub SelectButton_Click()
     Select Case UCase(SearchMode)
         Case "SELLER"
             ParentForm.売主.Text = clientNumber
-            ParentForm.うりな.Text = clientName
+            ParentForm.うりな.Text = shortName
         Case "BUYER"
             ParentForm.買主.Text = clientNumber
             ParentForm.かいな.Text = shortName

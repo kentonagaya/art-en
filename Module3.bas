@@ -14,8 +14,8 @@ Public Sub 名前自動入力()
     Dim isBuyer As Boolean
     Dim isSeller As Boolean
 
-    Set wsMaster = Worksheets("マスタ")
-    Set wsItem = Worksheets("項目")
+    Set wsMaster = Worksheets("伝票一覧")
+    Set wsItem = Worksheets("参加者一覧")
 
     '--- Selection がセルか確認 ---
     If TypeName(Selection) <> "Range" Then
@@ -26,7 +26,7 @@ Public Sub 名前自動入力()
     Set targetCell = Selection.Cells(1)
 
     '--- マスタシート上か確認 ---
-    If targetCell.Parent.Name <> "マスタ" Then
+    If targetCell.Parent.Name <> "伝票一覧" Then
         MsgBox "マスタシート上のセルを選択してください。", vbExclamation
         Exit Sub
     End If
@@ -87,7 +87,7 @@ Public Sub 名前自動入力B()
     Dim isRight As Boolean
 
     Set wsWarn = Worksheets("相互売買警告リスト")
-    Set wsItem = Worksheets("項目")
+    Set wsItem = Worksheets("参加者一覧")
 
     '--- Selection がセルか確認 ---
     If TypeName(Selection) <> "Range" Then

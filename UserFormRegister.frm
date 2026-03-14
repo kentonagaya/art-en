@@ -6,7 +6,7 @@ Private Sub RegisterButton_Click()
     Dim rng As Range
     Dim newran As Long
     Dim rc As VbMsgBoxResult
-    With Worksheets("項目")
+    With Worksheets("参加者一覧")
 
         Set rng = .Range("B2:C999").Find(Me.SearchBoxSlip.Value)
         
@@ -37,7 +37,6 @@ Private Sub RegisterButton_Click()
         .Cells(newran, 1).Value = Me.SearchBoxNumber.Text
         .Cells(newran, 2).Value = Me.SearchBoxSlip.Text
         .Cells(newran, 3).Value = Me.SearchBoxSale.Text
-        .Cells(newran, 4).Value = Me.SearchBoxNumber.Text
         
         MsgBox ("登録完了です。")
         

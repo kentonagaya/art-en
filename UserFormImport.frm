@@ -43,7 +43,7 @@ Private Sub SetNextSlipNumber()
 
     Dim lastRow As Long
 
-    With Worksheets("マスタ")
+    With Worksheets("伝票一覧")
 
         lastRow = .Cells(.Rows.Count, 1).End(xlUp).Row
 
@@ -61,24 +61,42 @@ End Sub
 Private Sub GetLatestInformationButton_Click()
 
     Dim lastRow As Long
-    
-    With Worksheets("マスタ")
-        
+    Dim rawItem As String
+    Dim itemName As String
+    Dim itemCount As String
+    Dim i As Long
+    Dim c As String
+
+    With Worksheets("伝票一覧")
+
         lastRow = .Cells(.Rows.Count, 1).End(xlUp).Row
-         
+
         Me.番号.Text = .Cells(lastRow, 1).Value
-        Me.品名.Text = .Cells(lastRow, 2).Value
-        Me.金額.Text = .Cells(lastRow, 3).Value
-          
+
+        rawItem = .Cells(lastRow, 2).Value
+        itemCount = ""
+
+        For i = Len(rawItem) To 1 Step -1
+            c = Mid(rawItem, i, 1)
+            If c Like "[0-9]" Then
+                itemCount = c & itemCount
+            ElseIf c = "点" Then
+            Else
+                Exit For
+            End If
+        Next i
+
+        Me.品名.Text = Trim(Left(rawItem, i))
+        Me.個数.Text = itemCount
+        Me.金額.Text = CLng(.Cells(lastRow, 3).Value) \ 1000
         Me.買主.Text = .Cells(lastRow, 5).Value
         Me.かいな.Text = .Cells(lastRow, 4).Value
         Me.売主.Text = .Cells(lastRow, 7).Value
         Me.うりな.Text = .Cells(lastRow, 6).Value
-        
+
     End With
 
 End Sub
-
 
 '--- リストマスタの内容を「項目」に反映 ---
 Private Sub 顧客更新_Click()
@@ -93,7 +111,7 @@ Private Sub 顧客更新_Click()
      
     ' 開いているブック（更新先）
     Set destWorkbook = ThisWorkbook
-    Set destWorksheet = destWorkbook.Sheets("項目")
+    Set destWorksheet = destWorkbook.Sheets("参加者一覧")
     
     ' 顧客リストマスタのパス
     filePath = ThisWorkbook.Path & sep & MASTER_FILE_NAME
@@ -130,21 +148,28 @@ End Sub
 '--- 品名に「マクリ」を記入 ---
 Private Sub マクリ_Click()
 
-    Me.品名.Text = Me.品名.Text + "マクリ"
+    Me.品名.Text = Me.品名.Text + "マクリ "
 
 End Sub
 
 '--- 品名に「巻物」を記入 ---
 Private Sub 巻物_Click()
 
-    Me.品名.Text = Me.品名.Text + "巻物"
+    Me.品名.Text = Me.品名.Text + "巻物 "
 
 End Sub
 
 '--- 品名に「画帖」を記入 ---
 Private Sub 画帖_Click()
 
-    Me.品名.Text = Me.品名.Text + "画帖"
+    Me.品名.Text = Me.品名.Text + "画帖 "
+
+End Sub
+
+'--- 品名に「山」を記入 ---
+Private Sub 山_Click()
+
+    Me.品名.Text = Me.品名.Text + "山 "
 
 End Sub
 
@@ -152,28 +177,6 @@ End Sub
 Private Sub ClearItemButton_Click()
 
     Me.品名.Value = ""
-
-End Sub
-
-'--- 個数に「点」を記入 ---
-Private Sub 点_Click()
-
-    Me.個数.Text = Me.個数.Text + "点"
-
-End Sub
-
-'--- 個数に「山」を記入 ---
-Private Sub 山_Click()
-
-    Me.個数.Text = Me.個数.Text + "山"
-
-End Sub
-
-Private Sub 金額_Change()
-
-    'If IsNumeric(Me.金額.Text) Then
-    '    Me.金額.Text = Format(Me.金額.Text, "#,##0")
-    'End If
 
 End Sub
 
@@ -220,7 +223,7 @@ Private Function ValidateAndResolveParties() As Boolean
     Dim myRange As Range, myObj As Range
     Dim keyword As String
 
-    Set ws = Worksheets("項目")
+    Set ws = Worksheets("参加者一覧")
     ValidateAndResolveParties = False
 
     ' 金額
@@ -318,7 +321,7 @@ Private Sub RegisterToMaster(ByVal AllowOverwrite As Boolean)
     Dim ws As Worksheet
     Dim lastRow As Long, nn As Long
 
-    Set ws = Worksheets("マスタ")
+    Set ws = Worksheets("伝票一覧")
 
     lastRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
 
@@ -330,13 +333,13 @@ Private Sub RegisterToMaster(ByVal AllowOverwrite As Boolean)
     End If
 
     ws.Cells(nn, 1).Value = Me.番号.Text
-    ws.Cells(nn, 2).Value = Me.品名.Text & Me.個数.Text
+    ws.Cells(nn, 2).Value = Me.品名.Text & Me.個数.Text & "点"
     ws.Cells(nn, 3).Value = CLng(Me.金額.Value) * 1000
     ws.Cells(nn, 4).Value = Me.かいな.Text
     ws.Cells(nn, 5).Value = Me.買主.Text
     ws.Cells(nn, 6).Value = Me.うりな.Text
     ws.Cells(nn, 7).Value = Me.売主.Text
-    ws.Cells(nn, 9).Value = Time
+    ws.Cells(nn, 8).Value = Time
 
 End Sub
 
@@ -346,7 +349,7 @@ Private Sub ShowRegisterMessage()
     MsgBox _
         "登録しました。" & vbCrLf & vbCrLf & _
         "伝票番号：" & Me.番号.Text & vbCrLf & _
-        "品名　　：" & Me.品名.Text & Me.個数.Text & vbCrLf & _
+        "品名　　：" & Me.品名.Text & Me.個数.Text & "点" & vbCrLf & _
         "落札額　：" & Format((CLng(Me.金額.Value) * 1000), "#,##0") & "円" & vbCrLf & _
         "売主　　：" & Me.売主.Text & " " & Me.うりな.Text & vbCrLf & _
         "買主　　：" & Me.買主.Text & " " & Me.かいな.Text, _

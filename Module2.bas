@@ -11,7 +11,7 @@ Sub 集計()
     Dim i As Long
     Dim data As Variant, buyerKeys As Variant, sellerKeys As Variant
     
-    data = Sheets("マスタ").Range("A1").CurrentRegion
+    data = Sheets("伝票一覧").Range("A1").CurrentRegion
     
     ' 買主データの集計
     

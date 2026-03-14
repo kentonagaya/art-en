@@ -36,7 +36,7 @@ Private Sub LoadParticipantList(Optional ByVal keyword As String = "")
     Dim i As Long, lastRow As Long
     Dim clientNameStr As String, shortNameStr As String, clientNumberStr As String
 
-    Set ws = Worksheets("項目")
+    Set ws = Worksheets("参加者一覧")
 
     Me.ListBox1.Clear
 
@@ -138,7 +138,7 @@ Private Sub CreateVoucher(ByVal IsProvisional As Boolean)
     On Error GoTo 0
     
     ' データの転記
-    Set ws01 = Worksheets("マスタ")
+    Set ws01 = Worksheets("伝票一覧")
     ws02.Cells(1, 1).Value = clientNumber
     ws02.Cells(1, 2).Value = clientName
     
