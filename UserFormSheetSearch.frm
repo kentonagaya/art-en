@@ -1,7 +1,7 @@
 Option Explicit
 
-Private Const COL_BUYER  As Long = 4 
-Private Const COL_SELLER As Long = 6 
+Private Const COL_BUYER  As Long = 4
+Private Const COL_SELLER As Long = 6
 
 Private matchCells() As String
 Private matchCount    As Long
@@ -28,16 +28,16 @@ Private Sub LoadParticipantList(Optional ByVal keyword As String = "")
         .ColumnWidths = "40;120;120"
     End With
 
-    lastRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    lastRow = ws.Cells(ws.Rows.count, 1).End(xlUp).Row
 
     For i = 2 To lastRow
-        numStr  = CStr(ws.Cells(i, 1).Value)
+        numStr = CStr(ws.Cells(i, 1).Value)
         nameStr = CStr(ws.Cells(i, 2).Value)
         shortStr = CStr(ws.Cells(i, 3).Value)
 
         If keyword = "" _
-           Or InStr(numStr,   keyword) > 0 _
-           Or InStr(nameStr,  keyword) > 0 _
+           Or InStr(numStr, keyword) > 0 _
+           Or InStr(nameStr, keyword) > 0 _
            Or InStr(shortStr, keyword) > 0 Then
             Me.ListBox1.AddItem numStr
             Me.ListBox1.List(Me.ListBox1.ListCount - 1, 1) = nameStr
@@ -101,7 +101,7 @@ Private Sub CollectMatches(ByVal number As String, ByVal col As Long)
     Dim lastRow As Long, i As Long, count As Long
 
     Set ws = Worksheets("伝票一覧")
-    lastRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    lastRow = ws.Cells(ws.Rows.count, 1).End(xlUp).Row
     count = 0
 
     ReDim matchCells(1 To lastRow)
@@ -149,3 +149,4 @@ End Sub
 Private Sub CloseButton_Click()
     Unload Me
 End Sub
+
