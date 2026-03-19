@@ -13,7 +13,7 @@ Sub 集計()
     Dim outRow As Long
 
     Set wsMaster = Worksheets("伝票一覧")
-    Set wsItem = Worksheets("参加者一覧")
+    Set wsItem = Worksheets("顧客一覧")
     Set wsResult = Worksheets("集計")
 
     ' --- クリア ---
