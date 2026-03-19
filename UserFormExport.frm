@@ -36,11 +36,11 @@ Private Sub LoadParticipantList(Optional ByVal keyword As String = "")
     Dim i As Long, lastRow As Long
     Dim clientNameStr As String, shortNameStr As String, clientNumberStr As String
 
-    Set ws = Worksheets("参加者一覧")
+    Set ws = Worksheets("顧客一覧")
 
     Me.ListBox1.Clear
 
-    lastRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    lastRow = ws.Cells(ws.Rows.count, 1).End(xlUp).Row
     
     With Me.ListBox1
         .Clear
@@ -122,13 +122,13 @@ Private Sub CreateVoucher(ByVal IsProvisional As Boolean)
     shortName = Me.ListBox1.List(Me.ListBox1.ListIndex, 2)
     
     ' シートのコピーと名前変更
-    Sheets("伝票テンプレート").Copy After:=Sheets(Sheets.Count)
+    Sheets("伝票テンプレート").Copy After:=Sheets(Sheets.count)
     Set ws02 = ActiveSheet
     
     ' 同名のシートがある場合のエラー対策
     On Error Resume Next
     ws02.Name = clientName
-    If Err.Number <> 0 Then
+    If Err.number <> 0 Then
         MsgBox "既に同名のシートが存在します。処理を中断します。"
         Application.DisplayAlerts = False
         ws02.Delete
@@ -142,7 +142,7 @@ Private Sub CreateVoucher(ByVal IsProvisional As Boolean)
     ws02.Cells(1, 1).Value = clientNumber
     ws02.Cells(1, 2).Value = clientName
     
-    lRow = ws01.Cells(ws01.Rows.Count, "A").End(xlUp).Row
+    lRow = ws01.Cells(ws01.Rows.count, "A").End(xlUp).Row
     
     ' --- 売り側の転記 ---
     mRow = START_ROW
@@ -180,8 +180,8 @@ Private Sub CreateVoucher(ByVal IsProvisional As Boolean)
 
     ' --- 保存と書き出し処理 ---
     ' ページ数を行数ベースで算出
-    lastSellRow = ws02.Cells(ws02.Rows.Count, 1).End(xlUp).Row
-    lastBuyRow = ws02.Cells(ws02.Rows.Count, 5).End(xlUp).Row
+    lastSellRow = ws02.Cells(ws02.Rows.count, 1).End(xlUp).Row
+    lastBuyRow = ws02.Cells(ws02.Rows.count, 5).End(xlUp).Row
     
     lastDataRow = Application.WorksheetFunction.Max(lastSellRow, lastBuyRow)
     
@@ -257,6 +257,7 @@ Private Sub CreateVoucher(ByVal IsProvisional As Boolean)
     MsgBox "No." & clientNumber & " " & clientName & " の伝票ファイルが作成されました。"
     
 End Sub
+
 
 
 
