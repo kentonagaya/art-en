@@ -6,7 +6,7 @@ Private Sub RegisterButton_Click()
     Dim rng As Range
     Dim newran As Long
     Dim rc As VbMsgBoxResult
-    With Worksheets("参加者一覧")
+    With Worksheets("顧客一覧")
 
         Set rng = .Range("B2:C999").Find(Me.SearchBoxSlip.Value)
         
@@ -26,7 +26,7 @@ Private Sub RegisterButton_Click()
         
         End If
         
-        newran = .Cells(.Rows.Count, "B").End(xlUp).Row + 1
+        newran = .Cells(.Rows.count, "B").End(xlUp).Row + 1
         
         Me.SearchBoxNumber.Value = Format(Me.SearchBoxNumber.Value, "000")
 
@@ -59,5 +59,9 @@ End Sub
 Private Sub CloseButton_Click()
 
     Unload UserFormRegister
+
+End Sub
+
+Private Sub UserForm_Click()
 
 End Sub
