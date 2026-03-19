@@ -45,12 +45,12 @@ Private Sub SetNextSlipNumber()
 
     With Worksheets("伝票一覧")
 
-        lastRow = .Cells(.Rows.Count, 1).End(xlUp).Row
+        lastRow = .Cells(.Rows.count, 1).End(xlUp).Row
 
         If .Cells(lastRow, 1).Value = "伝票番号" Then
-            Me.番号.Text = "1"
+            Me.伝票番号.Text = "1"
         Else
-            Me.番号.Text = .Cells(lastRow, 1).Value + 1
+            Me.伝票番号.Text = .Cells(lastRow, 1).Value + 1
         End If
 
     End With
@@ -69,9 +69,9 @@ Private Sub GetLatestInformationButton_Click()
 
     With Worksheets("伝票一覧")
 
-        lastRow = .Cells(.Rows.Count, 1).End(xlUp).Row
+        lastRow = .Cells(.Rows.count, 1).End(xlUp).Row
 
-        Me.番号.Text = .Cells(lastRow, 1).Value
+        Me.伝票番号.Text = .Cells(lastRow, 1).Value
 
         rawItem = .Cells(lastRow, 2).Value
         itemCount = ""
@@ -89,17 +89,17 @@ Private Sub GetLatestInformationButton_Click()
         Me.品名.Text = Trim(Left(rawItem, i))
         Me.個数.Text = itemCount
         Me.金額.Text = CLng(.Cells(lastRow, 3).Value) \ 1000
-        Me.買主.Text = .Cells(lastRow, 5).Value
-        Me.かいな.Text = .Cells(lastRow, 4).Value
-        Me.売主.Text = .Cells(lastRow, 7).Value
-        Me.うりな.Text = .Cells(lastRow, 6).Value
+        Me.買主番号.Text = .Cells(lastRow, 5).Value
+        Me.買主名前.Text = .Cells(lastRow, 4).Value
+        Me.売主番号.Text = .Cells(lastRow, 7).Value
+        Me.売主名前.Text = .Cells(lastRow, 6).Value
 
     End With
 
 End Sub
 
 '--- リストマスタの内容を「項目」に反映 ---
-Private Sub 顧客更新_Click()
+Private Sub RefreshListButton_Click()
 
     Const MASTER_FILE_NAME As String = "御堂会顧客リストマスタ.xlsx"
     Dim srcWorkbook As Workbook
@@ -111,7 +111,7 @@ Private Sub 顧客更新_Click()
      
     ' 開いているブック（更新先）
     Set destWorkbook = ThisWorkbook
-    Set destWorksheet = destWorkbook.Sheets("参加者一覧")
+    Set destWorksheet = destWorkbook.Sheets("顧客一覧")
     
     ' 顧客リストマスタのパス
     filePath = ThisWorkbook.Path & sep & MASTER_FILE_NAME
@@ -139,51 +139,37 @@ Private Sub 顧客更新_Click()
 End Sub
 
 '--- 品名に「掛軸」を記入 ---
-Private Sub 掛軸_Click()
+Private Sub KakejikuButton_Click()
 
     Me.品名.Text = Me.品名.Text + "掛軸 "
 
 End Sub
 
 '--- 品名に「マクリ」を記入 ---
-Private Sub マクリ_Click()
+Private Sub MakuriButton_Click()
 
     Me.品名.Text = Me.品名.Text + "マクリ "
 
 End Sub
 
 '--- 品名に「巻物」を記入 ---
-Private Sub 巻物_Click()
+Private Sub MakimonoButton_Click()
 
     Me.品名.Text = Me.品名.Text + "巻物 "
 
 End Sub
 
 '--- 品名に「画帖」を記入 ---
-Private Sub 画帖_Click()
+Private Sub GajoButton_Click()
 
     Me.品名.Text = Me.品名.Text + "画帖 "
 
 End Sub
 
 '--- 品名に「山」を記入 ---
-Private Sub 山_Click()
+Private Sub YamaButton_Click()
 
     Me.品名.Text = Me.品名.Text + "山 "
-
-End Sub
-
-'--- 品名の値を削除 ---
-Private Sub ClearItemButton_Click()
-
-    Me.品名.Value = ""
-
-End Sub
-
-'--- 金額の値を削除 ---
-Private Sub 値段クリア_Click()
-
-    Me.金額.Value = ""
 
 End Sub
 
@@ -195,7 +181,7 @@ Private Sub AllClearButton_Click()
 End Sub
 
 '--- 入力項目を「マスタ」に登録 ---
-Private Sub 登録_Click()
+Private Sub RegisterButton_Click()
  
     If Not ValidateAndResolveParties Then Exit Sub
     RegisterToMaster True
@@ -206,7 +192,7 @@ Private Sub 登録_Click()
 End Sub
 
 '--- 入力項目を「マスタ」に登録（売主情報継続） ---
-Private Sub 売主継続登録_Click()
+Private Sub KeepInfoRegisterButton_Click()
 
     If Not ValidateAndResolveParties Then Exit Sub
     RegisterToMaster False
@@ -223,7 +209,7 @@ Private Function ValidateAndResolveParties() As Boolean
     Dim myRange As Range, myObj As Range
     Dim keyword As String
 
-    Set ws = Worksheets("参加者一覧")
+    Set ws = Worksheets("顧客一覧")
     ValidateAndResolveParties = False
 
     ' 金額
@@ -233,14 +219,14 @@ Private Function ValidateAndResolveParties() As Boolean
     End If
 
     ' --- 買主 ---
-    If Me.買主.Value = "" Then
-        If Me.かいな.Value = "" Then
+    If Me.買主番号.Value = "" Then
+        If Me.買主名前.Value = "" Then
             MsgBox "買い未入力です"
             Exit Function
         End If
 
         Set myRange = ws.Range("B2:B500")
-        keyword = Me.かいな.Value
+        keyword = Me.買主名前.Value
         Set myObj = myRange.Find(keyword, LookAt:=xlWhole)
 
         If myObj Is Nothing Then
@@ -248,11 +234,11 @@ Private Function ValidateAndResolveParties() As Boolean
             Exit Function
         End If
 
-        Me.買主.Value = ws.Cells(myObj.Row, 1).Value
+        Me.買主番号.Value = ws.Cells(myObj.Row, 1).Value
 
     Else
         Set myRange = ws.Range("A2:A500")
-        keyword = Me.買主.Value
+        keyword = Me.買主番号.Value
         Set myObj = myRange.Find(keyword, LookAt:=xlWhole)
 
         If myObj Is Nothing Then
@@ -260,18 +246,18 @@ Private Function ValidateAndResolveParties() As Boolean
             Exit Function
         End If
 
-        Me.かいな.Value = ws.Cells(myObj.Row, 2).Value
+        Me.買主名前.Value = ws.Cells(myObj.Row, 2).Value
     End If
 
     ' --- 売主 ---
-    If Me.売主.Value = "" Then
-        If Me.うりな.Value = "" Then
+    If Me.売主番号.Value = "" Then
+        If Me.売主名前.Value = "" Then
             MsgBox "売り未入力です"
             Exit Function
         End If
 
         Set myRange = ws.Range("C2:C500")
-        keyword = Me.うりな.Value
+        keyword = Me.売主名前.Value
         Set myObj = myRange.Find(keyword, LookAt:=xlWhole)
 
         If myObj Is Nothing Then
@@ -279,11 +265,11 @@ Private Function ValidateAndResolveParties() As Boolean
             Exit Function
         End If
 
-        Me.売主.Value = ws.Cells(myObj.Row, 1).Value
+        Me.売主番号.Value = ws.Cells(myObj.Row, 1).Value
 
     Else
         Set myRange = ws.Range("A2:A500")
-        keyword = Me.売主.Value
+        keyword = Me.売主番号.Value
         Set myObj = myRange.Find(keyword, LookAt:=xlWhole)
 
         If myObj Is Nothing Then
@@ -291,22 +277,22 @@ Private Function ValidateAndResolveParties() As Boolean
             Exit Function
         End If
 
-        Me.うりな.Value = ws.Cells(myObj.Row, 3).Value
+        Me.売主名前.Value = ws.Cells(myObj.Row, 3).Value
     End If
 
     ' その他必須
-    If Me.品名.Value = "" Or Me.番号.Value = "" Then
+    If Me.品名.Value = "" Or Me.伝票番号.Value = "" Then
         MsgBox "品名または番号未入力"
         Exit Function
     End If
 
     '--- 相互売買警告 ---
-    If IsMutualTradeWarning(Me.買主.Text, Me.売主.Text) Then
+    If IsMutualTradeWarning(Me.買主番号.Text, Me.売主番号.Text) Then
         MsgBox _
             "【相互売買警告】" & vbCrLf & _
             "この売主・買主の組み合わせは登録できません。" & vbCrLf & _
-            "売主：" & Me.売主.Text & " " & Me.うりな.Text & vbCrLf & _
-            "買主：" & Me.買主.Text & " " & Me.かいな.Text, _
+            "売主：" & Me.売主番号.Text & " " & Me.売主名前.Text & vbCrLf & _
+            "買主：" & Me.買主番号.Text & " " & Me.買主名前.Text, _
             vbCritical
         Exit Function
     End If
@@ -323,22 +309,22 @@ Private Sub RegisterToMaster(ByVal AllowOverwrite As Boolean)
 
     Set ws = Worksheets("伝票一覧")
 
-    lastRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    lastRow = ws.Cells(ws.Rows.count, 1).End(xlUp).Row
 
-    If AllowOverwrite And ws.Cells(lastRow, 1).Value = Me.番号.Text Then
+    If AllowOverwrite And ws.Cells(lastRow, 1).Value = Me.伝票番号.Text Then
         If MsgBox("上書きですか？", vbYesNo + vbQuestion) = vbNo Then Exit Sub
         nn = lastRow
     Else
         nn = lastRow + 1
     End If
 
-    ws.Cells(nn, 1).Value = Me.番号.Text
+    ws.Cells(nn, 1).Value = Me.伝票番号.Text
     ws.Cells(nn, 2).Value = Me.品名.Text & Me.個数.Text & "点"
     ws.Cells(nn, 3).Value = CLng(Me.金額.Value) * 1000
-    ws.Cells(nn, 4).Value = Me.かいな.Text
-    ws.Cells(nn, 5).Value = Me.買主.Text
-    ws.Cells(nn, 6).Value = Me.うりな.Text
-    ws.Cells(nn, 7).Value = Me.売主.Text
+    ws.Cells(nn, 4).Value = Me.買主名前.Text
+    ws.Cells(nn, 5).Value = Me.買主番号.Text
+    ws.Cells(nn, 6).Value = Me.売主名前.Text
+    ws.Cells(nn, 7).Value = Me.売主番号.Text
     ws.Cells(nn, 8).Value = Time
 
 End Sub
@@ -348,11 +334,11 @@ Private Sub ShowRegisterMessage()
 
     MsgBox _
         "登録しました。" & vbCrLf & vbCrLf & _
-        "伝票番号：" & Me.番号.Text & vbCrLf & _
+        "伝票番号：" & Me.伝票番号.Text & vbCrLf & _
         "品名　　：" & Me.品名.Text & Me.個数.Text & "点" & vbCrLf & _
         "落札額　：" & Format((CLng(Me.金額.Value) * 1000), "#,##0") & "円" & vbCrLf & _
-        "売主　　：" & Me.売主.Text & " " & Me.うりな.Text & vbCrLf & _
-        "買主　　：" & Me.買主.Text & " " & Me.かいな.Text, _
+        "売主　　：" & Me.売主番号.Text & " " & Me.売主名前.Text & vbCrLf & _
+        "買主　　：" & Me.買主番号.Text & " " & Me.買主名前.Text, _
         vbInformation, "登録完了"
 
 End Sub
@@ -362,15 +348,15 @@ End Sub
 Private Sub ClearInputs(Optional ByVal KeepSeller As Boolean = False)
 
     SetNextSlipNumber
-    Me.買主.Text = ""
-    Me.かいな.Text = ""
+    Me.買主番号.Text = ""
+    Me.買主名前.Text = ""
     Me.品名.Text = ""
     Me.金額.Text = ""
     Me.個数.Text = ""
 
     If Not KeepSeller Then
-        Me.売主.Text = ""
-        Me.うりな.Text = ""
+        Me.売主番号.Text = ""
+        Me.売主名前.Text = ""
     End If
 
 End Sub
@@ -381,5 +367,3 @@ Private Sub CloseButton_Click()
     Unload UserFormImport
 
 End Sub
-
-
