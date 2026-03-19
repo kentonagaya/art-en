@@ -10,7 +10,7 @@ Public Function IsMutualTradeWarning(ByVal buyerNo As String, ByVal sellerNo As 
 
     Set ws = Worksheets("相互売買警告リスト")
 
-    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+    lastRow = ws.Cells(ws.Rows.count, "A").End(xlUp).Row
 
     For i = 2 To lastRow   ' 1行目は見出し想定
 
