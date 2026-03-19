@@ -60,11 +60,11 @@ Private Sub LoadParticipantList(Optional ByVal keyword As String = "")
     Dim i As Long, lastRow As Long
     Dim clientNameStr As String, shortNameStr As String, clientNumberStr As String
 
-    Set ws = Worksheets("参加者一覧")
+    Set ws = Worksheets("顧客一覧")
 
     Me.ListBox1.Clear
 
-    lastRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    lastRow = ws.Cells(ws.Rows.count, 1).End(xlUp).Row
 
     With Me.ListBox1
         .Clear
@@ -133,5 +133,4 @@ Private Sub CloseButton_Click()
     Unload Me
     
 End Sub
-
 
