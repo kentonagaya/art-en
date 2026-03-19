@@ -15,7 +15,7 @@ Public Sub 名前自動入力()
     Dim isSeller As Boolean
 
     Set wsMaster = Worksheets("伝票一覧")
-    Set wsItem = Worksheets("参加者一覧")
+    Set wsItem = Worksheets("顧客一覧")
 
     '--- Selection がセルか確認 ---
     If TypeName(Selection) <> "Range" Then
@@ -87,7 +87,7 @@ Public Sub 名前自動入力B()
     Dim isRight As Boolean
 
     Set wsWarn = Worksheets("相互売買警告リスト")
-    Set wsItem = Worksheets("参加者一覧")
+    Set wsItem = Worksheets("顧客一覧")
 
     '--- Selection がセルか確認 ---
     If TypeName(Selection) <> "Range" Then
