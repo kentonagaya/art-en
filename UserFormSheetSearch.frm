@@ -20,7 +20,7 @@ Private Sub LoadParticipantList(Optional ByVal keyword As String = "")
     Dim i As Long, lastRow As Long
     Dim numStr As String, nameStr As String, shortStr As String
 
-    Set ws = Worksheets("参加者一覧")
+    Set ws = Worksheets("顧客一覧")
 
     With Me.ListBox1
         .Clear
