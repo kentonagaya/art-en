@@ -114,11 +114,11 @@ Private Sub SelectButton_Click()
     ' 親フォームへ値を渡す
     Select Case UCase(SearchMode)
         Case "SELLER"
-            ParentForm.売主.Text = clientNumber
-            ParentForm.うりな.Text = shortName
+            ParentForm.売主番号.Text = clientNumber
+            ParentForm.売主名前.Text = shortName
         Case "BUYER"
-            ParentForm.買主.Text = clientNumber
-            ParentForm.かいな.Text = shortName
+            ParentForm.買主番号.Text = clientNumber
+            ParentForm.買主名前.Text = shortName
         Case Else
             MsgBox "検索モードが不正です。", vbCritical
     End Select
