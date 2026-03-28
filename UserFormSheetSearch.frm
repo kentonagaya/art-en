@@ -69,17 +69,14 @@ Private Sub SelectButton_Click()
     End If
 
     Dim searchValue As String
-    If Me.OptionBuyer.Value Then
-        searchValue = Me.ListBox1.List(Me.ListBox1.ListIndex, 1)
-    Else
-        searchValue = Me.ListBox1.List(Me.ListBox1.ListIndex, 2)
-    End If
-
     Dim searchCol As Long
+    
     If Me.OptionBuyer.Value Then
         searchCol = COL_BUYER
+        searchValue = Me.ListBox1.List(Me.ListBox1.ListIndex, 1)
     Else
         searchCol = COL_SELLER
+        searchValue = Me.ListBox1.List(Me.ListBox1.ListIndex, 2)
     End If
 
     CollectMatches searchValue, searchCol
@@ -105,15 +102,16 @@ Private Sub CollectMatches(ByVal number As String, ByVal col As Long)
     count = 0
 
     ReDim matchCells(1 To lastRow)
-
+    
     For i = 2 To lastRow
         If CStr(ws.Cells(i, col).Value) = number Then
             count = count + 1
             matchCells(count) = ws.Cells(i, col).Address
         End If
     Next i
-
+    
     matchCount = count
+    If matchCount > 0 Then ReDim Preserve matchCells(1 To matchCount)
 End Sub
 
 ' --- 現在インデックスのセルへジャンプ ---
@@ -149,4 +147,3 @@ End Sub
 Private Sub CloseButton_Click()
     Unload Me
 End Sub
-
