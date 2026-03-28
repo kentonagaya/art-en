@@ -144,6 +144,42 @@ Private Sub CreateVoucher(ByVal IsProvisional As Boolean)
     
     lRow = ws01.Cells(ws01.Rows.count, "A").End(xlUp).Row
     
+    Dim wsItem     As Worksheet
+    Dim foundCell  As Range
+    Dim buyerRate  As Double
+    Dim sellerRate As Double
+
+    Set wsItem = Worksheets("顧客一覧")
+
+    Set foundCell = wsItem.Range("A:A").Find(What:=clientNumber, LookAt:=xlWhole)
+
+    If foundCell Is Nothing Then
+        ' 顧客一覧に見つからない場合はデフォルト5%
+        buyerRate = 0.05
+        sellerRate = 0.05
+    Else
+        ' E列：買主手数料
+        If IsEmpty(wsItem.Cells(foundCell.Row, 5).Value) Or wsItem.Cells(foundCell.Row, 5).Value = "" Then
+            buyerRate = 0.05
+        ElseIf IsNumeric(wsItem.Cells(foundCell.Row, 5).Value) Then
+            buyerRate = CDbl(wsItem.Cells(foundCell.Row, 5).Value)
+            If buyerRate > 1 Then buyerRate = buyerRate / 100
+        Else
+            buyerRate = 0.05
+        End If
+
+        ' F列：売主手数料
+        If IsEmpty(wsItem.Cells(foundCell.Row, 6).Value) Or wsItem.Cells(foundCell.Row, 6).Value = "" Then
+            sellerRate = 0.05
+        ElseIf IsNumeric(wsItem.Cells(foundCell.Row, 6).Value) Then
+            sellerRate = CDbl(wsItem.Cells(foundCell.Row, 6).Value)
+            If sellerRate > 1 Then sellerRate = sellerRate / 100
+        Else
+            sellerRate = 0.05
+        End If
+    End If
+
+    
     ' --- 売り側の転記 ---
     mRow = START_ROW
     For i = 2 To lRow
@@ -170,6 +206,8 @@ Private Sub CreateVoucher(ByVal IsProvisional As Boolean)
         End If
     Next i
     ws02.Cells(mRow, 6).Value = "以下余白"
+    ws02.Range("A14").Formula = "=A12*" & sellerRate
+    ws02.Range("E14").Formula = "=E12*" & buyerRate
     
     ' --- 仮伝票の場合の追加処理 ---
     If IsProvisional Then
@@ -257,7 +295,3 @@ Private Sub CreateVoucher(ByVal IsProvisional As Boolean)
     MsgBox "No." & clientNumber & " " & clientName & " の伝票ファイルが作成されました。"
     
 End Sub
-
-
-
-
